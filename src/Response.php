@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Slim\Http;
 
 use InvalidArgumentException;
+use Psr\Http\Message\MessageInterface;
 use Slim\Http\Interfaces\ResponseInterface as DecoratedResponseInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -59,19 +60,9 @@ class Response implements DecoratedResponseInterface
     }
 
     /**
-     * Disable magic setter to ensure immutability
-     * @param mixed $name
-     * @param mixed $value
-     * @return void
-     */
-    public function __set($name, $value)
-    {
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function getBody()
+    public function getBody(): StreamInterface
     {
         return $this->response->getBody();
     }
@@ -135,7 +126,7 @@ class Response implements DecoratedResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withAddedHeader($name, $value)
+    public function withAddedHeader($name, $value): MessageInterface
     {
         $response = $this->response->withAddedHeader($name, $value);
         return new static($response, $this->streamFactory);
@@ -144,7 +135,7 @@ class Response implements DecoratedResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): MessageInterface
     {
         $response = $this->response->withBody($body);
         return new static($response, $this->streamFactory);
@@ -153,7 +144,7 @@ class Response implements DecoratedResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withHeader($name, $value)
+    public function withHeader($name, $value): MessageInterface
     {
         $response = $this->response->withHeader($name, $value);
         return new static($response, $this->streamFactory);
@@ -162,7 +153,7 @@ class Response implements DecoratedResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withoutHeader($name)
+    public function withoutHeader($name): MessageInterface
     {
         $response = $this->response->withoutHeader($name);
         return new static($response, $this->streamFactory);
@@ -171,7 +162,7 @@ class Response implements DecoratedResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): MessageInterface
     {
         $response = $this->response->withProtocolVersion($version);
         return new static($response, $this->streamFactory);
@@ -180,7 +171,7 @@ class Response implements DecoratedResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withStatus($code, $reasonPhrase = '')
+    public function withStatus($code, $reasonPhrase = ''): ResponseInterface
     {
         $response = $this->response->withStatus($code, $reasonPhrase);
         return new static($response, $this->streamFactory);
